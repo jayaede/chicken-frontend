@@ -1,0 +1,12 @@
+body {
+  font-family: Arial;
+  margin: 0;
+}
+input, button {
+  padding: 8px;
+  margin: 5px;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
