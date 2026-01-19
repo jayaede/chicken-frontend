@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Login from "../pages/Login";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 
 // Admin Pages
 import AdminDashboard from "../pages/admin/AdminDashboard";
@@ -70,6 +72,8 @@ function AppRoutes() {
 
         {/* Default Redirect */}
         <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
   );
 }

@@ -53,14 +53,6 @@ const Prices = () => {
     setPrice(row.pricePerKg);
   };
 
-  // const handleChange = (id, value) => {
-  //   setPrices((prev) =>
-  //     prev.map((p) =>
-  //       p._id === id ? { ...p, pricePerKg: value } : p
-  //     )
-  //   );
-  // };
-
   const handleSave = async () => {
     try {
       await axios.post(`/prices/${editingId}`, {
@@ -149,7 +141,7 @@ const Prices = () => {
             ))}
             <TableRow>
               <TableCell>
-                <FormControl sx={{ minWidth: 200 }}>
+                <FormControl sx={{ minWidth: 100 }} >
                   <Select
                     value={cutType}
                     label="Cut Type"
@@ -168,6 +160,7 @@ const Prices = () => {
                 <TextField
                   type="number"
                   value={price}
+                  sx={{ minWidth: 100 }}
                   onChange={(e) => setPrice(e.target.value)}
                   disabled={editingId !== null}
                 />

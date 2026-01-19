@@ -5,7 +5,9 @@ import {
   Grid,
   Paper,
   ToggleButton,
-  ToggleButtonGroup
+  ToggleButtonGroup,
+  Card,
+  CardContent,
 } from "@mui/material";
 import {
   LineChart,
@@ -13,7 +15,9 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  BarChart,
+  Bar,
 } from "recharts";
 import axios from "../../services/api";
 
@@ -66,45 +70,65 @@ const AdminDashboard = () => {
           <StatCard title="Total Shops" value={data.totalShops} />
         </Grid>
         <Grid item xs={3}>
-          <StatCard title="Total Revenue" value={`₹ ${data.totalSalesMonth}`} />
+          <StatCard title="Total Revenue" value={`₹ ${data.totalSoldKg.totalAmount}`} />
         </Grid>
         <Grid item xs={3}>
-          <StatCard title="Today's Revenue" value={`₹ ${data.totalSalesToday}`} />
+          <StatCard title="Today's Revenue" value={`₹ ${data.totalSalesToday.total}`} />
         </Grid>
         <Grid item xs={3}>
-          <StatCard title="Total Sold (KG)" value={data.totalSoldKg} />
+          <StatCard title="Total Sold (KG)" value={data.totalSoldKg.total} />
+        </Grid>
+        <Grid item xs={3}>
+          <StatCard title="Today Sold (KG)" value={data.totalSalesToday.totalKg} />
         </Grid>
         <Grid item xs={3}>
           <StatCard title="Remaining Stock (KG)" value={data.totalStockValue} />
         </Grid>
       </Grid>
 
-      <ToggleButtonGroup
-        value={range}
-        exclusive
-        onChange={(e, v) => v && setRange(v)}
-        sx={{ mb: 2, mt: 4 }}
-      >
-        <ToggleButton value="daily">Daily</ToggleButton>
-        <ToggleButton value="weekly">Weekly</ToggleButton>
-        <ToggleButton value="monthly">Monthly</ToggleButton>
-      </ToggleButtonGroup>
-
       {/* CHART */}
-      <Paper sx={{ p: 3, mt: 4 }}>
-        <Typography variant="h6" mb={2}>
-          Shop-wise Revenue
-        </Typography>
+      <Grid xs={12} md={8} spacing={2} my={4}>
+        <Card sx={{ borderRadius: 3, height: 350 }}>
+          <CardContent>
+            <ToggleButtonGroup
+              value={range}
+              exclusive
+              onChange={(e, v) => v && setRange(v)}
+              sx={{ mb: 2, mt: 4 }}
+            >
+              <ToggleButton value="daily">Daily Sale</ToggleButton>
+              <ToggleButton value="weekly">Weekly Sale</ToggleButton>
+              <ToggleButton value="monthly">Monthly Sale</ToggleButton>
+            </ToggleButtonGroup>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={filteredChart}>
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line dataKey="amount" stroke="#1976d2" />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </Grid>
 
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={filteredChart}>
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Line dataKey="amount" stroke="#1976d2" />
-          </LineChart>
-        </ResponsiveContainer>
-      </Paper>
+      <Grid xs={12} md={4} spacing={2}>
+        <Card sx={{ borderRadius: 3, height: 350 }}>
+          <CardContent>
+            <Typography variant="h6" mb={2}>
+              Shop-wise Sales
+            </Typography>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={data.shopWise}>
+                <XAxis dataKey="shopName" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="totalAmount" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </Grid>
     </Box>
   );
 };

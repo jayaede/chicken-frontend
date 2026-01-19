@@ -23,7 +23,6 @@ const Shops = () => {
     password: "",
     phone: ""
   });
-
   useEffect(() => {
     loadShops();
   }, []);
@@ -32,6 +31,16 @@ const Shops = () => {
     const res = await axios.get("/admin/shops");
     setShops(res.data);
   };
+
+  const isFormValid = () => {
+    return (
+      form.name.trim() !== "" &&
+      form.location.trim() !== "" &&
+      form.username.trim() !== "" &&
+      form.password.trim() !== "" &&
+      form.phone.trim() !== ""
+    );
+  }
 
   const createShop = async () => {
     await axios.post("/admin/shops", form);
@@ -104,7 +113,11 @@ const Shops = () => {
           </Grid>
 
           <Grid item xs={12}>
-            <Button variant="contained" onClick={createShop}>
+            <Button 
+              variant="contained"
+              onClick={createShop}
+              disabled={isFormValid() ? false : true}
+            >
               Create Shop
             </Button>
           </Grid>
@@ -118,8 +131,6 @@ const Shops = () => {
               <TableCell>Shop Name</TableCell>
               <TableCell>Location</TableCell>
               <TableCell>Phone</TableCell>
-              <TableCell>Total Sold (KG)</TableCell>
-              <TableCell>Total Revenue</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -130,8 +141,6 @@ const Shops = () => {
                 <TableCell>{s.name}</TableCell>
                 <TableCell>{s.location}</TableCell>
                 <TableCell>{s.phone}</TableCell>
-                <TableCell>{s.totalSoldKg}</TableCell>
-                <TableCell>₹ {s.totalRevenue}</TableCell>
                 <TableCell>{s.status}</TableCell>
               </TableRow>
             ))}

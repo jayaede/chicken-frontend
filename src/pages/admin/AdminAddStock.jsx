@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import {
-  Box,
+  Paper,
   Button,
-  Card,
-  CardContent,
   Typography,
   TextField,
   MenuItem,
-  CircularProgress
+  CircularProgress,
+  Grid
 } from "@mui/material";
 import axios from "../../services/api";
 import Snackbar from "../../components/common/Snackbar";
@@ -68,24 +67,16 @@ export default function AdminAddStock() {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        mt: 5
-      }}
-    >
-      <Card sx={{ width: 420 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Add Stock to Shop
-          </Typography>
-
-          {/* Shop Dropdown */}
+     <Paper sx={{ p: 2, mb: 3 }}>
+      <Typography variant="h6" gutterBottom>
+        Add Stock to Shop
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
           <TextField
             select
             label="Select Shop"
-            fullWidth
+            sx={{ minWidth: 220 }}
             value={shopId}
             onChange={(e) => setShopId(e.target.value)}
             margin="normal"
@@ -96,35 +87,34 @@ export default function AdminAddStock() {
               </MenuItem>
             ))}
           </TextField>
-
-          {/* Quantity */}
+        </Grid>
+        <Grid item xs={12} md={6}>
           <TextField
             label="Quantity (Kg)"
             type="number"
-            fullWidth
             value={quantityKg}
             onChange={(e) => setQuantityKg(e.target.value)}
             margin="normal"
             inputProps={{ min: 1 }}
           />
-
-          {/* Button */}
+        </Grid>
+        <Grid item xs={12}>
           <Button
             variant="contained"
             fullWidth
             sx={{ mt: 2 }}
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || !shopId || !quantityKg}
           >
             {loading ? <CircularProgress size={24} /> : "Add Stock"}
           </Button>
-        </CardContent>
-      </Card>
+        </Grid>
+      </Grid>
       <Snackbar
         open={snackbar.open}
         message={snackbar.message}
         severity={snackbar.severity}
       />
-    </Box>
+    </Paper>
   );
 }

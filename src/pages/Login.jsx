@@ -12,6 +12,7 @@ import {
   Typography,
   Alert,
   CircularProgress,
+  Link
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
@@ -127,19 +128,28 @@ export default function Login() {
               }}
               required
             />
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              sx={{ mt: 3, py: 1.2 }}
-              disabled={loading}
-            >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                "Login"
-              )}
-            </Button>
+            <Box display="flex" justifyContent="space-between" mt={1}>
+              <Link
+                component="button"
+                variant="body2"
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forgot Password?
+              </Link>
+              <Button
+                
+                type="submit"
+                variant="contained"
+                sx={{ mt: 1, py: 1.2 }}
+                disabled={loading}
+              >
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Login"
+                )}
+              </Button>
+            </Box>
           </Box>
         </CardContent>
       </Card>
