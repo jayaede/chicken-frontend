@@ -30,7 +30,7 @@ const Sales = () => {
     const selectedPrice =
       prices.find((p) => p.cutType === cutType)?.pricePerKg || 0;
     setPricePerKg(selectedPrice);
-    const total = Number(quantityKg) * Number(pricePerKg);
+    const total = Number(quantityKg) * Number(selectedPrice);
     setTotalAmount(total > 0 ? total : 0);
   }, [quantityKg, cutType]);
 
