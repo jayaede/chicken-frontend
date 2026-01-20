@@ -23,6 +23,7 @@ const Shops = () => {
     password: "",
     phone: ""
   });
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     loadShops();
   }, []);
@@ -32,13 +33,27 @@ const Shops = () => {
     setShops(res.data);
   };
 
+  const handleChange = (e, MAX_LENGTH) => {
+    const { name, value } = e.target;
+    if (value.length > MAX_LENGTH) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: `Maximum ${MAX_LENGTH} characters allowed`,
+      }));
+      return;
+    }
+
+    setForm((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
   const isFormValid = () => {
     return (
-      form.name.trim() !== "" &&
-      form.location.trim() !== "" &&
-      form.username.trim() !== "" &&
-      form.password.trim() !== "" &&
-      form.phone.trim() !== ""
+      form.name && !errors.name &&
+      form.location && !errors.location &&
+      form.password && !errors.password &&
+      form.username && !errors.username &&
+      form.phone && !errors.phone
     );
   }
 
@@ -60,10 +75,11 @@ const Shops = () => {
             <TextField
               fullWidth
               label="Shop Name"
+              name="name"
               value={form.name}
-              onChange={(e) =>
-                setForm({ ...form, name: e.target.value })
-              }
+              error={Boolean(errors.name)}
+              helperText={errors.name}
+              onChange={(e) => handleChange(e,50)}
             />
           </Grid>
 
@@ -71,21 +87,23 @@ const Shops = () => {
             <TextField
               fullWidth
               label="Location"
+              name="location"
               value={form.location}
-              onChange={(e) =>
-                setForm({ ...form, location: e.target.value })
-              }
+              error={Boolean(errors.location)}
+              helperText={errors.location}
+              onChange={(e) => handleChange(e,50)}
             />
           </Grid>
 
           <Grid item xs={6}>
             <TextField
               fullWidth
+              name="username"
               label="Manager Username"
               value={form.username}
-              onChange={(e) =>
-                setForm({ ...form, username: e.target.value })
-              }
+              error={Boolean(errors.username)}
+              helperText={errors.username}
+              onChange={(e) => handleChange(e,7)}
             />
           </Grid>
 
@@ -94,21 +112,23 @@ const Shops = () => {
               fullWidth
               type="password"
               label="Password"
+              name="password"
               value={form.password}
-              onChange={(e) =>
-                setForm({ ...form, password: e.target.value })
-              }
+              error={Boolean(errors.password)}
+              helperText={errors.password}
+              onChange={(e) => handleChange(e,8)}
             />
           </Grid>
           
           <Grid item xs={6}>
             <TextField
               fullWidth
+              name="phone"
               label="Phone"
               value={form.phone}
-              onChange={(e) =>
-                setForm({ ...form, phone: e.target.value })
-              }
+              error={Boolean(errors.phone)}
+              helperText={errors.phone}
+              onChange={(e) => handleChange(e,10)}
             />
           </Grid>
 

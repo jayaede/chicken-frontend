@@ -46,7 +46,7 @@ export default function ForgotPassword() {
         >
           Back to Login
         </Link>
-        <Button variant="contained" onClick={sendOtp}>
+        <Button variant="contained" onClick={sendOtp} disabled={loading || !username}>
           Send OTP
         </Button>
       </Box>

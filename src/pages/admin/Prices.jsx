@@ -117,9 +117,13 @@ const Prices = () => {
                       type="number"
                       size="small"
                       value={price}
-                      onChange={(e) =>
-                        setPrice(e.target.value)
-                      }
+                      helperText={error}
+                      error={Boolean(error)}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        if (value < 1) return;
+                        setPrice(value);
+                        }}
                     />
                   ) : (
                     `₹ ${row.pricePerKg}`
@@ -161,7 +165,11 @@ const Prices = () => {
                   type="number"
                   value={price}
                   sx={{ minWidth: 100 }}
-                  onChange={(e) => setPrice(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    if (value < 1) return;
+                    setPrice(value);
+                  }}
                   disabled={editingId !== null}
                 />
               </TableCell>

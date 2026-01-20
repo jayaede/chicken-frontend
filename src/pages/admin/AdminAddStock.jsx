@@ -93,9 +93,12 @@ export default function AdminAddStock() {
             label="Quantity (Kg)"
             type="number"
             value={quantityKg}
-            onChange={(e) => setQuantityKg(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "");
+              if (value < 1) return;
+              setQuantityKg(value);
+            }}
             margin="normal"
-            inputProps={{ min: 1 }}
           />
         </Grid>
         <Grid item xs={12}>

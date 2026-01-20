@@ -24,6 +24,7 @@ const Sales = () => {
   const [loading, setLoading] = useState(false);
   const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
   const [prices, setPrices] = useState([]);
+  const [error, setError] = useState(null);
   const storedUser = JSON.parse(localStorage.getItem("user"));
   /* 🔹 Auto calculate total */
   useEffect(() => {
@@ -114,9 +115,14 @@ const Sales = () => {
           <TextField
             label="Quantity (Kg)"
             type="number"
+            min={0}
             fullWidth
             value={quantityKg}
-            onChange={(e) => setQuantityKg(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "");
+              if (value < 1) return;
+              setQuantityKg(value);
+            }}
           />
         </Grid>
 
