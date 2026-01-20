@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 
 const api = axios.create({
   // baseURL: "http://localhost:5000/api"
@@ -20,7 +19,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401 || error.response?.status === 403) {
       console.error("Unauthorized / Forbidden – logging out");
       localStorage.clear();
-      return <Navigate to="/login" replace />;
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
