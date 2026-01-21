@@ -46,8 +46,12 @@ export default function Login() {
 
     try {
       const res = await axios.post("/auth/login", form);
-      login(res.data);
-      if (res.data.user?.role === "ADMIN") {
+      const { token, user } = res.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user?.role);
+      localStorage.setItem("user", JSON.stringify(user));
+      login(token, user?.role);
+      if (user?.role === "ADMIN") {
         navigate("/admin", { replace: true });
       } else {
         navigate("/shop", { replace: true });

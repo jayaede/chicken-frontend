@@ -39,7 +39,7 @@ export default function Sidebar({ role, open, onClose }) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    localStorage.removeItem("shopId");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
