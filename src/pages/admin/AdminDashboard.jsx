@@ -66,23 +66,29 @@ const AdminDashboard = () => {
 
       {/* STATS */}
       <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <StatCard title="Total Shops" value={data.totalShops} />
+        <Grid container item xs={12} spacing={2} mb={4}>
+          <Grid item xs={3}>
+            <StatCard title="Total Shops" value={data.totalShops} />
+          </Grid>
+          <Grid item xs={3}>
+            <StatCard title="Total Revenue" value={`₹ ${data.totalSoldKg.totalAmount}`} />
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Total Revenue" value={`₹ ${data.totalSoldKg.totalAmount}`} />
+        <Grid container item xs={12} spacing={2} mb={4}>
+          <Grid item xs={3}>
+            <StatCard title="Today's Revenue" value={`₹ ${data.totalSalesToday.total}`} />
+          </Grid>
+          <Grid item xs={3}>
+            <StatCard title="Total Sold (KG)" value={data.totalSoldKg.total} />
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Today's Revenue" value={`₹ ${data.totalSalesToday.total}`} />
-        </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Total Sold (KG)" value={data.totalSoldKg.total} />
-        </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Today Sold (KG)" value={data.totalSalesToday.totalKg} />
-        </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Remaining Stock (KG)" value={data.totalStockValue} />
+        <Grid container item xs={12} spacing={2} mb={4}>
+          <Grid item xs={3}>
+            <StatCard title="Today Sold (KG)" value={data.totalSalesToday.totalKg} />
+          </Grid>
+          <Grid item xs={3}>
+            <StatCard title="Remaining Stock (KG)" value={data.totalStockValue} />
+          </Grid>
         </Grid>
       </Grid>
 
