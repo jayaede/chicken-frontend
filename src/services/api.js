@@ -18,7 +18,9 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401 || error.response?.status === 403) {
       console.error("Unauthorized / Forbidden – logging out");
-      localStorage.clear();
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("user");
       window.location.href = "/login";
     }
     return Promise.reject(error);

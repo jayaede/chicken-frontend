@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
@@ -9,16 +10,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedRole = localStorage.getItem("role");
-    if(storedToken){
-      try {
-        const decoded = jwtDecode(storedToken);
-        if (decoded.exp * 1000 < Date.now()) {
-          logout();
-        } else {
-          setUser({ token: storedToken, role: storedRole });
-        }
-      } catch (err) {
+    if (storedToken) {
+      const decoded = jwtDecode(storedToken);
+      if (decoded.exp * 1000 < Date.now()) {
         logout();
+      } else {
+        setUser({ token: storedToken, role: storedRole });
       }
     }
     setLoading(false);
@@ -39,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
