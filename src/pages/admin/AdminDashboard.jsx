@@ -8,6 +8,7 @@ import {
   ToggleButtonGroup,
   Card,
   CardContent,
+  CircularProgress
 } from "@mui/material";
 import {
   LineChart,
@@ -31,10 +32,13 @@ const StatCard = ({ title, value }) => (
 const AdminDashboard = () => {
   const [data, setData] = useState(null);
   const [range, setRange] = useState("daily");
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setLoading(true);
     axios.get("/admin/dashboard").then(res => {
       setData(res.data);
     });
+    setLoading(false);
   }, []);
   const filteredChart = useMemo(() => {
     if (!data) return [];
@@ -63,72 +67,75 @@ const AdminDashboard = () => {
       <Typography variant="h5" mb={3}>
         Admin Dashboard
       </Typography>
-
+      {loading ? <CircularProgress size={24} sx={{ mt: 2 }} /> : (
+      <>
       {/* STATS */}
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <StatCard title="Total Shops" value={data.totalShops} />
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <StatCard title="Total Shops" value={data.totalShops} />
+          </Grid>
+          <Grid item xs={3}>
+            <StatCard title="Total Revenue" value={`₹ ${data.totalSoldKg.totalAmount}`} />
+          </Grid>
+          <Grid item xs={3}>
+            <StatCard title="Today's Revenue" value={`₹ ${data.totalSalesToday.total}`} />
+          </Grid>
+          <Grid item xs={3}>
+            <StatCard title="Total Sold (KG)" value={data.totalSoldKg.total} />
+          </Grid>
+          <Grid item xs={3}>
+            <StatCard title="Today Sold (KG)" value={data.totalSalesToday.totalKg} />
+          </Grid>
+          <Grid item xs={3}>
+            <StatCard title="Stock Left (KG)" value={data.totalStockValue} />
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Total Revenue" value={`₹ ${data.totalSoldKg.totalAmount}`} />
-        </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Today's Revenue" value={`₹ ${data.totalSalesToday.total}`} />
-        </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Total Sold (KG)" value={data.totalSoldKg.total} />
-        </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Today Sold (KG)" value={data.totalSalesToday.totalKg} />
-        </Grid>
-        <Grid item xs={3}>
-          <StatCard title="Stock Left (KG)" value={data.totalStockValue} />
-        </Grid>
-      </Grid>
 
-      {/* CHART */}
-      <Grid xs={12} md={8} spacing={2} my={4}>
-        <Card sx={{ borderRadius: 3, height: 350 }}>
-          <CardContent>
-            <ToggleButtonGroup
-              value={range}
-              exclusive
-              onChange={(e, v) => v && setRange(v)}
-              sx={{ mb: 2, mt: 4 }}
-            >
-              <ToggleButton value="daily">Daily Sale</ToggleButton>
-              <ToggleButton value="weekly">Weekly Sale</ToggleButton>
-              <ToggleButton value="monthly">Monthly Sale</ToggleButton>
-            </ToggleButtonGroup>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={filteredChart}>
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Line dataKey="amount" stroke="#1976d2" />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </Grid>
+        {/* CHART */}
+        <Grid xs={12} md={8} spacing={2} my={4}>
+          <Card sx={{ borderRadius: 3, height: 350 }}>
+            <CardContent>
+              <ToggleButtonGroup
+                value={range}
+                exclusive
+                onChange={(e, v) => v && setRange(v)}
+                sx={{ mb: 2, mt: 4 }}
+              >
+                <ToggleButton value="daily">Daily Sale</ToggleButton>
+                <ToggleButton value="weekly">Weekly Sale</ToggleButton>
+                <ToggleButton value="monthly">Monthly Sale</ToggleButton>
+              </ToggleButtonGroup>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={filteredChart}>
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line dataKey="amount" stroke="#1976d2" />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      <Grid xs={12} md={4} spacing={2}>
-        <Card sx={{ borderRadius: 3, height: 350 }}>
-          <CardContent>
-            <Typography variant="h6" mb={2}>
-              Shop-wise Sales
-            </Typography>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={data.shopWise}>
-                <XAxis dataKey="shopName" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="totalAmount" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </Grid>
+        <Grid xs={12} md={4} spacing={2}>
+          <Card sx={{ borderRadius: 3, height: 350 }}>
+            <CardContent>
+              <Typography variant="h6" mb={2}>
+                Shop-wise Sales
+              </Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={data.shopWise}>
+                  <XAxis dataKey="shopName" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="totalAmount" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </Grid>
+      </>
+      )}
     </Box>
   );
 };
