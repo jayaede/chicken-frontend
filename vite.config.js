@@ -29,6 +29,15 @@ export default defineConfig({
             "type": "image/png"
           }
         ]
+      },
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) =>
+              url.origin.includes("onrender.com"),
+            handler: "NetworkOnly"
+          }
+        ]
       }
     })
   ]
