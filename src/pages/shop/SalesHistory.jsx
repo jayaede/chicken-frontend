@@ -9,13 +9,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  CircularProgress
+  CircularProgress,
+  Box
 } from "@mui/material";
+import Snackbar from "../../components/common/Snackbar";
 
 export default function SalesHistory() {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
   useEffect(() => {
     fetchSales();
   }, []);
@@ -79,6 +81,12 @@ export default function SalesHistory() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Snackbar
+        open={snack.open}
+        message={snack.msg}
+        type={snack.type}
+        onClose={() => setSnack({ ...snack, open: false })}
+      />
     </Paper>
   );
 }

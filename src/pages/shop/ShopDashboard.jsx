@@ -37,7 +37,6 @@ const ShopDashboard = () => {
     }
   };
 
-  if (!data) return null;
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>

@@ -15,7 +15,7 @@ export default function AdminAddStock() {
   const [shops, setShops] = useState([]);
   const [shopId, setShopId] = useState("");
   const [quantityKg, setQuantityKg] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -65,7 +65,7 @@ export default function AdminAddStock() {
       setLoading(false);
     }
   };
-    if (loading) {
+  if (loading) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
         <CircularProgress />

@@ -11,9 +11,10 @@ import {
   TableCell,
   TableBody,
   Grid,
+  CircularProgress
 } from "@mui/material";
 import axios from "../../services/api";
-
+import Snackbar from "../../components/common/Snackbar";
 const Shops = () => {
   const [shops, setShops] = useState([]);
   const [form, setForm] = useState({
@@ -24,13 +25,21 @@ const Shops = () => {
     phone: ""
   });
   const [errors, setErrors] = useState({});
+  const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     loadShops();
   }, []);
 
   const loadShops = async () => {
-    const res = await axios.get("/admin/shops");
-    setShops(res.data);
+    try {
+      const res = await axios.get("/admin/shops");
+      setShops(res.data);
+    } catch (err) {
+      setSnack({ open: true, msg: "Failed to load shops", type: "error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e, MAX_LENGTH) => {
@@ -62,6 +71,14 @@ const Shops = () => {
     setForm({ name: "", location: "", username: "", password: "", phone: "" });
     loadShops();
   };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -167,6 +184,11 @@ const Shops = () => {
           </TableBody>
         </Table>
       </Paper>
+      <Snackbar
+        open={snack.open}
+        message={snack.msg}
+        severity={snack.type}
+      />
     </Box>
   );
 };

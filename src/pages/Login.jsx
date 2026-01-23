@@ -66,6 +66,14 @@ export default function Login() {
     }
   };
 
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
@@ -147,11 +155,7 @@ export default function Login() {
                 sx={{ mt: 1, py: 1.2 }}
                 disabled={loading}
               >
-                {loading ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  "Login"
-                )}
+                Login
               </Button>
             </Box>
           </Box>

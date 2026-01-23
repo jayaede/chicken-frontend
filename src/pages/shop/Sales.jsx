@@ -22,7 +22,7 @@ const Sales = () => {
   const [quantityKg, setQuantityKg] = useState(0);
   const [pricePerKg, setPricePerKg] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
   const [prices, setPrices] = useState([]);
   const [error, setError] = useState(null);
@@ -47,6 +47,8 @@ const Sales = () => {
       setPrices(res.data);
     } catch (err) {
       setSnack({ open: true, msg: "Failed to load prices", type: "error" });
+    } finally {
+      setLoading(false);
     }
   };
 
