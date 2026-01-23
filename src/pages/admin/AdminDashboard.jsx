@@ -21,6 +21,7 @@ import {
   Bar,
 } from "recharts";
 import axios from "../../services/api";
+import Snackbar from "../../components/common/Snackbar";
 
 const StatCard = ({ title, value }) => (
   <Paper sx={{ p: 2 }}>
@@ -33,13 +34,20 @@ const AdminDashboard = () => {
   const [data, setData] = useState(null);
   const [range, setRange] = useState("daily");
   const [loading, setLoading] = useState(true);
+  const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
   useEffect(() => {
-    setLoading(true);
-    axios.get("/admin/dashboard").then(res => {
-      setData(res.data);
-    });
-    setLoading(false);
+    fetchDashboardData();
   }, []);
+  const fetchDashboardData = async () => {
+    try {
+      const res = await axios.get("/admin/dashboard");
+      setData(res.data);
+    } catch (err) {
+      setSnack({ open: true, msg: "Failed to load dashboard data", type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
   const filteredChart = useMemo(() => {
     if (!data) return [];
     if (range === "daily") return data.salesChart;
@@ -138,6 +146,12 @@ const AdminDashboard = () => {
           </CardContent>
         </Card>
       </Grid>
+      <Snackbar
+        open={snack.open}
+        message={snack.msg}
+        type={snack.type}
+        onClose={() => setSnack({ ...snack, open: false })}
+      />
     </Box>
   );
 };

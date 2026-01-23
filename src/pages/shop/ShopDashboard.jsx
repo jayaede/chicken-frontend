@@ -9,6 +9,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import axios from "../../services/api";
+import Snackbar from "../../components/common/Snackbar";
 
 const Card = ({ title, value }) => (
   <Paper sx={{ p: 2 }}>
@@ -20,12 +21,21 @@ const Card = ({ title, value }) => (
 const ShopDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
   useEffect(() => {
-    axios.get("/shop/dashboard").then(res => {
-      setData(res.data);
-    });
-    setLoading(false);
+    fetchDashboardData();
   }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const res = await axios.get("/shop/dashboard");
+      setData(res.data);
+    } catch (err) {
+      setSnack({ open: true, msg: "Failed to load dashboard data", type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (!data) return null;
   if (loading) {
@@ -68,6 +78,12 @@ const ShopDashboard = () => {
           </LineChart>
         </ResponsiveContainer>
       </Paper>
+      <Snackbar
+        open={snack.open}
+        message={snack.msg}
+        type={snack.type}
+        onClose={() => setSnack({ ...snack, open: false })}
+      />
     </Box>
   );
 };
