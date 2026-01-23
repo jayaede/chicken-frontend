@@ -65,7 +65,13 @@ export default function AdminAddStock() {
       setLoading(false);
     }
   };
-
+    if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
      <Paper sx={{ p: 2, mb: 3 }}>
       <Typography variant="h6" gutterBottom>
@@ -109,7 +115,7 @@ export default function AdminAddStock() {
             onClick={handleSubmit}
             disabled={loading || !shopId || !quantityKg}
           >
-            {loading ? <CircularProgress size={24} /> : "Add Stock"}
+            Add Stock
           </Button>
         </Grid>
       </Grid>

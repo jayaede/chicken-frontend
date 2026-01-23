@@ -52,13 +52,9 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(user));
       login(token, user?.role);
       if (user?.role === "ADMIN") {
-        setTimeout(() => {
-          navigate("/admin", { replace: true });
-        }, 300);
+        navigate("/admin", { replace: true });
       } else {
-        setTimeout(() => {
-          navigate("/shop", { replace: true });
-        }, 300);
+        navigate("/shop", { replace: true });
       }
     } catch (err) {
       console.error("LOGIN ERROR:", err);

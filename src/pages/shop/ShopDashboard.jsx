@@ -28,43 +28,46 @@ const ShopDashboard = () => {
   }, []);
 
   if (!data) return null;
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box>
       <Typography variant="h5" mb={3}>Shop Dashboard</Typography>
-      {loading ? <CircularProgress size={24} sx={{ mt: 2 }} /> : (
-      <>
-        {/* STATS */}
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <Card title="Today's Revenue" value={`₹ ${data.todaySales}`} />
-          </Grid>
-          <Grid item xs={4}>
-            <Card title="Remaining Stock (KG)" value={data.currentStockKg} />
-          </Grid>
+      {/* STATS */}
+      <Grid container spacing={2}>
+        <Grid item xs={4}>
+          <Card title="Today's Revenue" value={`₹ ${data.todaySales}`} />
         </Grid>
+        <Grid item xs={4}>
+          <Card title="Remaining Stock (KG)" value={data.currentStockKg} />
+        </Grid>
+      </Grid>
 
-        {/* LOW STOCK ALERT */}
-        {data.currentStockKg < 20 && (
-          <Alert severity="warning" sx={{ mt: 3 }}>
-            Low stock! Please update stock soon.
-          </Alert>
-        )}
-
-        {/* CHART */}
-        <Paper sx={{ p: 3, mt: 4 }}>
-          <Typography variant="h6" mb={2}>Daily Sales</Typography>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data.salesChart}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="amount" stroke="#1976d2" strokeWidth={3} />
-            </LineChart>
-          </ResponsiveContainer>
-        </Paper>
-      </>
+      {/* LOW STOCK ALERT */}
+      {data.currentStockKg < 20 && (
+        <Alert severity="warning" sx={{ mt: 3 }}>
+          Low stock! Please update stock soon.
+        </Alert>
       )}
+
+      {/* CHART */}
+      <Paper sx={{ p: 3, mt: 4 }}>
+        <Typography variant="h6" mb={2}>Daily Sales</Typography>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={data.salesChart}>
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="amount" stroke="#1976d2" strokeWidth={3} />
+          </LineChart>
+        </ResponsiveContainer>
+      </Paper>
     </Box>
   );
 };

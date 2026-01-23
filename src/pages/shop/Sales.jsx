@@ -12,6 +12,7 @@ import {
   FormControl,
   InputLabel,
   Select,
+  CircularProgress
 } from "@mui/material";
 import axios from "../../services/api";
 import CUT_TYPES from "../../constants/CutTypes";
@@ -73,6 +74,14 @@ const Sales = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box>

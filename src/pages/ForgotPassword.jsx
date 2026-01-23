@@ -27,6 +27,14 @@ export default function ForgotPassword() {
     }
   };
 
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Paper sx={{ p: 4, maxWidth: 400, mx: "auto", mt: 10 }}>
       <Typography variant="h6">Forgot Password</Typography>
@@ -55,7 +63,6 @@ export default function ForgotPassword() {
         message={snack.msg}
         severity={snack.type}
       />
-     { loading && (<CircularProgress size={24} sx={{ mt: 2 }} />)}
     </Paper>
   );
 }
