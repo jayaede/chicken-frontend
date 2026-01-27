@@ -6,7 +6,8 @@ import {
   TextField,
   MenuItem,
   CircularProgress,
-  Grid
+  Grid,
+  Box
 } from "@mui/material";
 import axios from "../../services/api";
 import Snackbar from "../../components/common/Snackbar";
@@ -24,12 +25,23 @@ export default function AdminAddStock() {
 
   // 🔹 Fetch shops
   useEffect(() => {
-    const fetchShops = async () => {
-      const res = await axios.get("/admin/shops");
-      setShops(res.data);
-    };
     fetchShops();
   }, []);
+
+  const fetchShops = async () => {
+    try{
+      const res = await axios.get("/admin/shops");
+      setShops(res.data);
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: "Failed to load shops",
+        severity: "error"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 🔹 Add stock
   const handleSubmit = async () => {
