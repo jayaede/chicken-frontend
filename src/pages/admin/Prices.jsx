@@ -17,6 +17,7 @@ import {
   Alert,
   FormControl,
   Select,
+  InputLabel,
   MenuItem,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -40,8 +41,8 @@ const Prices = () => {
     try {
       const res = await axios.get("/prices");
       setPrices(res.data);
-    } catch (err) {
-      setSnack({ open: true, msg: "Failed to load prices", type: "error" });
+    } catch (error) {
+      setSnack({ open: true, msg: error ? error : "Failed to load prices", type: "error" });
     } finally {
       setLoading(false);
     }
@@ -91,7 +92,7 @@ const Prices = () => {
   }
 
   return (
-    <Paper sx={{ p: 3 }}>
+    <>
       <Typography variant="h5" mb={2}>
         Chicken Prices (Per KG)
       </Typography>
@@ -105,7 +106,6 @@ const Prices = () => {
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
             {prices.map((row) => (
               <TableRow key={row._id}>
@@ -117,13 +117,11 @@ const Prices = () => {
                       type="number"
                       size="small"
                       value={price}
-                      helperText={error}
-                      error={Boolean(error)}
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, "");
                         if (value < 1) return;
                         setPrice(value);
-                        }}
+                      }}
                     />
                   ) : (
                     `₹ ${row.pricePerKg}`
@@ -146,6 +144,7 @@ const Prices = () => {
             <TableRow>
               <TableCell>
                 <FormControl sx={{ minWidth: 100 }} >
+                  <InputLabel>Cut Type</InputLabel>
                   <Select
                     value={cutType}
                     label="Cut Type"
@@ -173,7 +172,7 @@ const Prices = () => {
                   disabled={editingId !== null}
                 />
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 <Button
                   variant="contained"
                   disabled={!cutType || !price || editingId !== null}
@@ -194,7 +193,7 @@ const Prices = () => {
       >
         <Alert severity={snack.type}>{snack.msg}</Alert>
       </Snackbar>
-    </Paper>
+    </>
   );
 };
 

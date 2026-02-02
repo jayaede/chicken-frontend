@@ -5,16 +5,16 @@ import {
   Paper,
   TextField,
   Button,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Grid,
-  CircularProgress
+  CircularProgress,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import axios from "../../services/api";
 import Snackbar from "../../components/common/Snackbar";
+import ShopDrawer from "./ShopDrawer";
+import ShopCard from "./ShopCard";
+
 const Shops = () => {
   const [shops, setShops] = useState([]);
   const [form, setForm] = useState({
@@ -27,6 +27,9 @@ const Shops = () => {
   const [errors, setErrors] = useState({});
   const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
   const [loading, setLoading] = useState(true);
+  const [selectedShop, setSelectedShop] = useState(null);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [filter, setFilter] = useState("all");
   useEffect(() => {
     loadShops();
   }, []);
@@ -41,6 +44,11 @@ const Shops = () => {
       setLoading(false);
     }
   };
+
+  const filteredShops =
+    filter === "low"
+      ? shops.filter((s) => s.stockLeft < 10)
+      : shops;
 
   const handleChange = (e, MAX_LENGTH) => {
     const { name, value } = e.target;
@@ -161,29 +169,35 @@ const Shops = () => {
         </Grid>
       </Paper>
 
-      <Paper>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Shop Name</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Status</TableCell>
-            </TableRow>
-          </TableHead>
+      <ToggleButtonGroup
+        value={filter}
+        exclusive
+        onChange={(e, val) => val && setFilter(val)}
+        sx={{ mb: 2 }}
+      >
+        <ToggleButton value="all">All Shops</ToggleButton>
+        <ToggleButton value="low">Low Stock</ToggleButton>
+      </ToggleButtonGroup>
 
-          <TableBody>
-            {shops.map((s) => (
-              <TableRow key={s._id}>
-                <TableCell>{s.name}</TableCell>
-                <TableCell>{s.location}</TableCell>
-                <TableCell>{s.phone}</TableCell>
-                <TableCell>{s.status}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
+       <Grid container spacing={2}>
+        {filteredShops.map((shop) => (
+          <Grid item xs={12} md={4} key={shop._id}>
+            <ShopCard
+              shop={shop}
+              onClick={() => {
+                setSelectedShop(shop)
+                setOpenDrawer(true)
+              }}
+            />
+          </Grid>
+        ))}
+      </Grid>
+
+      {selectedShop && <ShopDrawer
+        open={openDrawer}
+        shop={selectedShop}
+        onClose={() => setOpenDrawer(false)}
+      />}
       <Snackbar
         open={snack.open}
         message={snack.msg}

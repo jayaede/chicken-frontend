@@ -49,23 +49,35 @@ const AdminDashboard = () => {
     }
   };
   const filteredChart = useMemo(() => {
-    if (!data) return [];
+    if (!data?.salesChart) return [];
     if (range === "daily") return data.salesChart;
 
     const map = {};
+    const dateMap = {}; // Track original dates for sorting
+
     data.salesChart.forEach(item => {
-      const key =
-        range === "weekly"
-          ? item.date.slice(0, 7) + "-W"
-          : item.date.slice(0, 7);
+      const date = new Date(item.date);
+      let key;
+
+      if (range === "weekly") {
+        // Get ISO week number
+        const firstDay = new Date(date.setDate(date.getDate() - date.getDay()));
+        key = `${firstDay.getFullYear()}-${String(firstDay.getMonth() + 1).padStart(2, "0")}-W${String(Math.ceil((firstDay.getDate()) / 7)).padStart(2, "0")}`;
+      } else if (range === "monthly") {
+        key = item.date.slice(0, 7); // YYYY-MM format
+      }
 
       map[key] = (map[key] || 0) + item.amount;
+      dateMap[key] = new Date(item.date);
     });
 
-    return Object.entries(map).map(([date, amount]) => ({
-      date,
-      amount
-    }));
+    // Sort by date and return
+    return Object.entries(map)
+      .sort(([, dateA], [, dateB]) => dateA - dateB)
+      .map(([date, amount]) => ({
+        date,
+        amount
+      }));
   }, [range, data]);
 
   if (loading) {
@@ -106,18 +118,23 @@ const AdminDashboard = () => {
       <Grid xs={12} md={8} spacing={2} my={4}>
         <Card sx={{ borderRadius: 3, height: 350 }}>
           <CardContent>
-            <ToggleButtonGroup
-              value={range}
-              exclusive
-              onChange={(e, v) => v && setRange(v)}
-              sx={{ mb: 2, mt: 4 }}
-            >
-              <ToggleButton value="daily">Daily Sale</ToggleButton>
-              <ToggleButton value="weekly">Weekly Sale</ToggleButton>
-              <ToggleButton value="monthly">Monthly Sale</ToggleButton>
-            </ToggleButtonGroup>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <Typography variant="h6">Sales {range.charAt(0).toUpperCase() + range.slice(1)}</Typography>
+              <ToggleButtonGroup
+                value={range}
+                exclusive
+                onChange={(e, newValue) => {
+                  if (newValue !== null) setRange(newValue);
+                }}
+                size="small"
+              >
+                <ToggleButton value="daily">Daily</ToggleButton>
+                <ToggleButton value="weekly">Weekly</ToggleButton>
+                <ToggleButton value="monthly">Monthly</ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={filteredChart}>
+              <LineChart data={filteredChart} >
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />

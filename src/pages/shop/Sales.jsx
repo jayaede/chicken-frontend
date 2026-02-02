@@ -25,8 +25,8 @@ const Sales = () => {
   const [loading, setLoading] = useState(true);
   const [snack, setSnack] = useState({ open: false, msg: "", type: "success" });
   const [prices, setPrices] = useState([]);
-  const [error, setError] = useState(null);
   const storedUser = JSON.parse(localStorage.getItem("user"));
+  const currentStockKg = localStorage.getItem("currentStockKg");
   /* 🔹 Auto calculate total */
   useEffect(() => {
     const selectedPrice =
@@ -165,13 +165,13 @@ const Sales = () => {
             fullWidth
             size="large"
             onClick={submitSale}
-            disabled={loading || !quantityKg || !pricePerKg}
+            disabled={loading || currentStockKg == 0 || !quantityKg || !pricePerKg}
           >
             Add Sale
           </Button>
         </Grid>
       </Grid>
-      </Paper>
+    </Paper>
 
       <Snackbar
         open={snack.open}

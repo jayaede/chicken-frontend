@@ -29,6 +29,7 @@ const ShopDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const res = await axios.get("/shop/dashboard");
+      localStorage.setItem("currentStockKg", res.data.currentStockKg);
       setData(res.data);
     } catch (err) {
       setSnack({ open: true, msg: "Failed to load dashboard data", type: "error" });
@@ -59,7 +60,7 @@ const ShopDashboard = () => {
       </Grid>
 
       {/* LOW STOCK ALERT */}
-      {data.currentStockKg < 20 && (
+      {data.currentStockKg < 10 && (
         <Alert severity="warning" sx={{ mt: 3 }}>
           Low stock! Please update stock soon.
         </Alert>
