@@ -12,7 +12,7 @@ export default function MiniSparkline({ data }) {
         <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
-        <Bar dataKey="value" radius={[6, 6, 0, 0]} />
+        <Bar dataKey="quantity" radius={[6, 6, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
