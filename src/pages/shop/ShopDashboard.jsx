@@ -55,6 +55,9 @@ const ShopDashboard = () => {
           <Card title="Today's Revenue" value={`₹ ${data.todaySales}`} />
         </Grid>
         <Grid item xs={4}>
+          <Card title="Today's Sale (KG)" value={data.todaySoldKg} />
+        </Grid>
+        <Grid item xs={4}>
           <Card title="Remaining Stock (KG)" value={data.currentStockKg} />
         </Grid>
       </Grid>
